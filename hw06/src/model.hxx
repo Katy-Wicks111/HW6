@@ -140,6 +140,15 @@ private:
     Position_set find_flips_(ge211::Position start,
                              ge211::Dimensions dir) const{
         Position_set pset= Position_set();
+        //Position temp= start;
+        size_t n=1;
+        while(board_.good_position(start+n*dir) &&
+        board_[start+n*dir]==other_player(turn_))
+        {
+            pset[(start+n*dir)]= true;
+            n++;
+        }
+        return pset;
     }
 
     // Returns the set of positions that the current player would gain
@@ -147,7 +156,16 @@ private:
     // play in the given position then the result is empty.
     //
     // (Helper for `compute_next_moves_`.)
-    Position_set evaluate_position_(ge211::Position) const;
+    Position_set evaluate_position_(ge211::Position pos) const //
+    {
+        if(board_[pos]==neither)
+        {
+            find_flips_(pos);//idk what to do if they don't give a
+            // pos
+        }
+            else
+        {return Position_set();}
+    }
 
     // Updates `next_moves_` to contain the moves available the current
     // player.
