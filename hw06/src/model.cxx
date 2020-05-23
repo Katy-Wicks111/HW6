@@ -9,7 +9,7 @@ Model::Model(int size)
 Model::Model(int width, int height)
         : board_({width, height})
 {
-    // TODO: initialize `next_moves_` to `turn_`'s available moves
+    compute_next_moves_();
 }
 
 Rectangle Model::board() const
@@ -41,8 +41,23 @@ void Model::play_move(Position pos)
     if (!movep)
         throw Client_logic_error("Model::play_move: no such move");
 
-    // TODO: actually execute the move, advance the turn, refill
-    // `next_moves_`, etc.
+    Position top1 = board_.center_positions().top_left();
+    Position top2 = board_.center_positions().top_right();
+    Position bottom1 = board_.center_positions().bottom_left();
+    Position bottom2 = board_.center_positions().bottom_right();
+    if(board_[top1] == Player:: neither)
+        next_moves_[top1] = {top1};
+    if(board_[top2] == Player:: neither)
+        next_moves_[top2] = {top2};
+    if(board_[bottom1] == Player:: neither)
+        next_moves_[bottom1] = {bottom1};
+    if(board_[bottom2] == Player:: neither)
+        next_moves_[bottom2] = {bottom2};
+
+    if(!next_moves_.empty())
+        return;
+
+    really_play_move_(*movep);
 }
 
 //
@@ -51,36 +66,69 @@ void Model::play_move(Position pos)
 
 Position_set Model::find_flips_(Position current, Dimensions dir) const
 {
-    // TODO OR NOT TODO: OPTIONAL HELPER
-    return {};
-    // ^^^ this is wrong
+    Position_set result = Position_set();
+    for (int i = 1; i < 8; i = i + 1){
+        Position pos = current + i * dir;
+        if (!board_.good_position(pos) || board_[pos] == Player::neither){
+            result.clear();
+            return result;
+        }
+        else if (board_[pos] == other_player(turn_)){
+            result[pos] = true;
+        }
+        else if (board_[pos] == turn_){
+            return result;
+        }
+    }
 }
 
 Position_set Model::evaluate_position_(Position pos) const
 {
-    // TODO OR NOT TODO: OPTIONAL HELPER
-    return {};
-    // ^^^ this is wrong
+    Position_set result = Position_set();
+   if(board_[pos] == Player::neither){
+    for(int i = 0; i < board_.all_directions().size(); i = i + 1){
+        Position_set temp = find_flips_(pos, board_.all_directions()[i]);
+        result = result|temp;
+    }
+    if (!result.empty()){
+        result[pos] = true;
+    }
+        return result;
+   } else{
+       return result;
+   }
 }
 
 void Model::compute_next_moves_()
 {
-    // TODO OR NOT TODO: OPTIONAL HELPER
+    next_moves_.clear();
+    for(Position pos : board_.all_positions()) {
+        next_moves_[pos] = evaluate_position_(pos);
+    }
 }
 
 bool Model::advance_turn_()
 {
-    // TODO OR NOT TODO: OPTIONAL HELPER
-    return false;
-    // ^^^ this is wrong
+    turn_ = other_player(turn_);
+    compute_next_moves_();
+    if(next_moves_.empty())
+        return false;
+    else
+        return true;
 }
 
 void Model::set_game_over_()
 {
-    // TODO OR NOT TODO: OPTIONAL HELPER
+    turn_ = Player::neither;
+    winner_ = winner();
 }
 
 void Model::really_play_move_(Move move)
 {
-    // TODO OR NOT TODO: OPTIONAL HELPER
+    board_.set_all(evaluate_position_(move.first),turn_);
+    if (!advance_turn_()){
+       if (!advance_turn_()){
+           set_game_over_();
+       }
+    }
 }
