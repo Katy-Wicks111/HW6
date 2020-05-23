@@ -82,6 +82,23 @@ Position_set Model::find_flips_(Position current, Dimensions dir) const
     }
 }
 
+/////katys
+    Position_set find_flips_(ge211::Position start,
+                             ge211::Dimensions dir) const{
+        Position_set pset= Position_set();
+        //Position temp= start;
+        size_t n=1;
+        while(board_.good_position(start+n*dir) &&
+        board_[start+n*dir]==other_player(turn_))
+        {
+            pset[(start+n*dir)]= true;
+            n++;
+        }
+        return pset;
+    }
+
+///
+
 Position_set Model::evaluate_position_(Position pos) const
 {
     Position_set result = Position_set();
