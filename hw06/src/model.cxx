@@ -83,19 +83,19 @@ Position_set Model::find_flips_(Position current, Dimensions dir) const
 }
 
 /////katys
-    Position_set find_flips_(ge211::Position start,
-                             ge211::Dimensions dir) const{
-        Position_set pset= Position_set();
-        //Position temp= start;
-        size_t n=1;
-        while(board_.good_position(start+n*dir) &&
-        board_[start+n*dir]==other_player(turn_))
-        {
-            pset[(start+n*dir)]= true;
-            n++;
-        }
-        return pset;
+Position_set Model::find_flips_(Position current, Dimensions dir) const
+{
+    Position_set pset= Position_set();
+    //Position temp= start;
+    size_t n=1;
+    while(board_.good_position(current+n*dir) &&
+          board_[current+n*dir]==other_player(turn_))
+    {
+        pset[(current+n*dir)]= true;
+        n++;
     }
+    return pset;
+}
 
 ///
 
@@ -188,6 +188,11 @@ struct Test_access
     evaluate_position_(Position pos)
     {
         return m_.evaluate_position_(pos);
+    }
+        
+   void compute_next_moves_()
+    {
+       m_.compute_next_moves_();
     }
     //idk how to do compute next moves/the otehr void stuff since it doesn't
     // return anything
