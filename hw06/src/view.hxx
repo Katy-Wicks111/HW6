@@ -23,4 +23,8 @@ private:
 
     // TODO: Add any private members you need, such as helper functions
     // or sprites.
+        ge211::Circle_sprite const dark_token_{token_radius, dark_color};
+    ge211::Circle_sprite const light_token_{token_radius, light_color};
+    ge211::Circle_sprite const dark_shadow_{token_radius, dark_shaded};
+    ge211::Circle_sprite const light_shadow_{token_radius, light_shaded};
 };
