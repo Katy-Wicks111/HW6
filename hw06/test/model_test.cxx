@@ -32,3 +32,32 @@ TEST_CASE("Throws with starter code")
 }
 
 // YOU NEED MANY MORE TESTS!
+//  TESTS FOR PRIVATE HELPER FUNCTIONS
+//it's not recognizing test access tho:(
+TEST_CASE("test find flips")
+{
+Model model;
+Test_access t{model};
+
+t.board()[{2,2}] = Player::dark;
+t.board[{2,3.}] = Player::light;
+
+Position_set f;
+
+f = t.find_flips({2,4},{0,1});
+CHECK(f.empty());
+
+f = t.find_flips({2,4},{0,-1}); //how do I know which player it is checking for?
+CHECK(f == Position_set{{2,3}}); //ig its dark player idk why
+
+f = t.evaluate_position({2,4});
+CHECK(f == Position_set{{2,3}, {2,4}}); //not sure if I should include
+// position itself or just the other players positions that changed
+
+f = t.evaluate_position({2,2});
+CHECK(f.empty());
+
+f = t.evaluate_position({3,2});
+CHECK(f == Position_set(){3,2}); //again, do i include position?
+
+}
