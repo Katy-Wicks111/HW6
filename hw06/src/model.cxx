@@ -116,6 +116,26 @@ Position_set Model::evaluate_position_(Position pos) const
    }
 }
 
+//alternate: searches all directions to find longest chain of opposing playe positions, returns those positions
+/*
+Position_set Model::evaluate_position_(Position pos) const //
+{
+    if(board_[pos]==Player::neither)
+    {
+        Position_set max_flips = Position_set();
+        for(int i = 0; i < board_.all_directions().size(); i = i + 1) {
+            Position_set temp = find_flips_(pos, i);
+            if (temp.size() > max_flips.size())
+            {
+                max_flips = temp;
+            }
+        }
+    }
+    else
+    {return Position_set();}
+}
+*/
+
 void Model::compute_next_moves_()
 {
     next_moves_.clear();
