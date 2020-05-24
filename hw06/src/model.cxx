@@ -169,3 +169,27 @@ void Model::really_play_move_(Move move)
        }
     }
 }
+
+//test accesss struct but not working
+struct Test_access
+{
+    Model& m_;
+    Board& board()
+    {
+        return m_.board_;
+    }
+    Position_set
+    find_flips(Position start, Dimensions dir) //what is this doing?
+    {
+        return m_.find_flips_(start, dir);
+    }
+
+    Position_set
+    evaluate_position_(Position pos)
+    {
+        return m_.evaluate_position_(pos);
+    }
+    //idk how to do compute next moves/the otehr void stuff since it doesn't
+    // return anything
+
+};
